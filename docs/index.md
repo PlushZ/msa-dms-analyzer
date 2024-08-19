@@ -26,6 +26,7 @@ Additionally, we compared scores with substitution scores BLOSUM62 and PAM250. T
 - BLOSUM90 (pearson 0.428),
 - GONNET1992 (pearson 0.412),
 - RAO (pearson 0.427)
+
 See [DMS and substitution scores correlations](####dms-and-substitution-scores-correlations)
 
 To compare substitution scores (BLOSUM62 and PAM250) we normalized them to the same scale as DMS scores using minmax around neutral point:
