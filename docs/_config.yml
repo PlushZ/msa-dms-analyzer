@@ -1,0 +1,6 @@
+theme: minima
+markdown: kramdown
+title: "DMS-MSA Analyzer"
+description: "Analyze deep mutational scanning data along with multiple sequence alignment data"
+include:
+  - css/styles.css

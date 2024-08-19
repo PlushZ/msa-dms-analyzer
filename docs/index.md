@@ -1,12 +1,26 @@
+---
+title: "DMS-MSA Analyzer"
+layout: default
+---
+
+
+<div class="sidebar">
+    <h2>Table of Contents</h2>
+    <a href="#cyp2c19">CYP2C19</a>
+    <a href="#results-dms-substitution">results-dms-substitution</a>
+</div>
+
+<div class="content">
+
 # DMS-MSA data analyser
 Example analysis for 1 gene (CYP2C19) is present in [section 'CYP2C19'](#cyp2c19). The same analysis I will apply for aggregated DMS data from [zenodo](https://zenodo.org/records/11201737):
 
-## CYP2C19:
+## <a name="cyp2c19"></a>CYP2C19:
 
 - DMS scores pulled from [MaveDB](https://www.mavedb.org/score-sets/urn:mavedb:00001199-a-1)
 - Multiple Alignment pulled from [Ensembl](https://www.ensembl.org/Homo_sapiens/Gene/Compara_Ortholog?db=core;g=ENSG00000165841;r=10:94762681-94855547)
 
-### Results: CYP2C19 dms scores vs. substitution scores
+### <a name="results-dms-substitution"></a>Results: CYP2C19 dms scores vs. substitution scores
 #### Transition from amino acid X to amino acid Y and vice versa
 CYP2C19 DMS scores produced by the VAMP-Seq method ([Matreyek et al. 2018](https://www.nature.com/articles/s41588-018-0122-z)). These have the median null mutation at 0, neutral variants at 1 and positive variants (i.e., improved function) greater than 1.
 
@@ -17,6 +31,7 @@ We normalized CYP2C19 DMS scores with minmax scaling around neutral point, so th
 - 0<x<=1: Indicate improved function relative to WT
 - x=0: neutral or WT
 
+#### Transition from amino acid X to amino acid Y with BLOSUM62, PAM250
 Additionally, we compared scores with substitution scores BLOSUM62 and PAM250. There are also other substitution scores available in [BioPython](https://github.com/biopython/biopython/tree/master/Bio/Align/substitution_matrices/data). 
 - BLOSUM62 has been chosen because it showed one of the best correlations with CYP2C19 DMS scores (pearson correlation 0.407), along with 
 - BENNER74 substitution scores (pearson correlation 0.411), 
@@ -90,3 +105,4 @@ We compared dms scores with Shannon entropy and calculated correlations between 
 we took all AA1->AA2 (where AA2 != AA1 and AA2 != gap) transitions which are confirmed by MSA and DMS and plottted all possible variants aiming to find correlation between variant proportion and dms score. For CYP2C19 it is hard to say if the correlation exist because data is sparse. 
 
 ![CYP2C19_per_position_dms_var_proportion.png](images/CYP2C19_per_position_dms_var_proportion.png)
+</div>
