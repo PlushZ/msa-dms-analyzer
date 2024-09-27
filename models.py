@@ -17,6 +17,14 @@ class GeneURN(Base):
     spearman_dms_blosum62 = Column(Float)
     pearson_dms_grantham = Column(Float)
     spearman_dms_grantham = Column(Float)
+    pearson_dms_grantham_disruptive = Column(Float, nullable=True)
+    spearman_dms_grantham_disruptive = Column(Float, nullable=True)
+    pearson_dms_grantham_tolerant = Column(Float, nullable=True)
+    spearman_dms_grantham_tolerant = Column(Float, nullable=True)
+    pearson_dms_blosum62_unfavorable = Column(Float, nullable=True)
+    spearman_dms_blosum62_unfavorable = Column(Float, nullable=True)
+    pearson_dms_blosum62_favorable = Column(Float, nullable=True)
+    spearman_dms_blosum62_favorable = Column(Float, nullable=True)
 
 class Species(Base):
     __tablename__ = 'species'
@@ -50,10 +58,14 @@ class DmsRange(Base):
     __tablename__ = 'dms_range'
     dms_range_id = Column(Integer, primary_key=True, autoincrement=True)
     gene_urn_id = Column(Integer, ForeignKey('gene_urn.gene_urn_id'))
-    wt = Column(Float)
-    lof = Column(Float)
+    nonsense_from_data = Column(Float)
     max_hyperactivity = Column(Float)
+    synonymous_from_data = Column(Float)
     calc_method = Column(Text)
+    nonsense_from_method = Column(Float)
+    synonymous_from_method = Column(Float)
+    min_from_data = Column(Float)
+    max_from_data = Column(Float)
     # Relationships
     gene_urn = relationship('GeneURN')
 

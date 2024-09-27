@@ -1,21 +1,74 @@
 --all mutation for particular urn
-SELECT m.*, g.gene_name, g.urn_mavedb, d.score
-FROM mutation m
-JOIN gene_urn g ON m.gene_urn_id = g.gene_urn_id
-JOIN dms d ON m.mutation_id = d.mutation_id
---WHERE g.urn_mavedb LIKE '%0001-a-3%' --AND m.position = '358'
-WHERE g.gene_urn_id = 109 
-	AND m.position=1
-	AND m.wt_residue='T'
-	AND m.variant_residue='S'
+SELECT 
+    m.*, 
+    g.gene_name, 
+    g.urn_mavedb, 
+    d.score, 
+    s.blosum62, 
+    s.grantham
+FROM 
+    mutation m
+JOIN 
+    gene_urn g ON m.gene_urn_id = g.gene_urn_id
+JOIN 
+    dms d ON m.mutation_id = d.mutation_id
+JOIN 
+    substitution_matrix s 
+    ON m.wt_residue = s.amino_acid_x 
+    AND m.variant_residue = s.amino_acid_y
+--WHERE 
+--    g.gene_urn_id = 106;
 ORDER BY 
 	--m.mutation_id,
-	m.position;
+	g.urn_mavedb, m.mutation_id;
 
-SELECT d.score
-FROM dms d
-JOIN mutation m ON m.mutation_id=d.mutation_id
-WHERE m.gene_urn_id=109
+SELECT amino_acid_x, amino_acid_y, blosum62, grantham
+FROM substitution_matrix
+WHERE amino_acid_x = 'A'
+ORDER BY amino_acid_x, amino_acid_y
+
+-------------------------------------
+SELECT g.gene_urn_id, g.urn_mavedb, g.gene_name,
+FROM gene_urn g
+LEFT JOIN mutation m ON g.gene_urn_id = m.gene_urn_id
+WHERE m.mutation_id IS NULL
+ORDER BY g.urn_mavedb;
+-------------------------------------
+
+SELECT 
+	gene_urn_id, 
+	--gene_name, 
+	urn_mavedb, 
+	--pearson_dms_blosum62, 
+	--spearman_dms_blosum62, 
+	pearson_dms_grantham, 
+	--spearman_dms_grantham,
+	pearson_dms_grantham_disruptive,
+    --spearman_dms_grantham_disruptive,
+    pearson_dms_grantham_tolerant --,
+    --spearman_dms_grantham_tolerant --,
+    --pearson_dms_blosum62_unfavorable,
+    --spearman_dms_blosum62_unfavorable,
+    --pearson_dms_blosum62_favorable --,
+    --spearman_dms_blosum62_favorable
+FROM gene_urn
+--WHERE gene_urn_id=153
+ORDER BY ABS(pearson_dms_grantham_disruptive) DESC
+
+select * from mutation_type
+
+select amino_acid_x, amino_acid_y, blosum62, grantham 
+from substitution_matrix 
+where blosum62 is not null
+order by blosum62 asc
+
+select * from gene_urn
+
+select * from dms_range
+
+SELECT column_name
+FROM information_schema.columns
+WHERE table_name = 'dms_range';
 
 SELECT g.gene_urn_id
 FROM gene_urn g
