@@ -1,3 +1,4 @@
+select * from integrated_data
 --all mutation for particular urn
 SELECT 
     m.*, 
@@ -9,18 +10,19 @@ SELECT
 FROM 
     mutation m
 JOIN 
-    gene_urn g ON m.gene_urn_id = g.gene_urn_id
+    gene_urn g ON m.gene_urn_id = g.id
 JOIN 
-    dms d ON m.mutation_id = d.mutation_id
+    dms d ON m.id = d.mutation_id
 JOIN 
     substitution_matrix s 
     ON m.wt_residue = s.amino_acid_x 
     AND m.variant_residue = s.amino_acid_y
---WHERE 
---    g.gene_urn_id = 106;
-ORDER BY 
+WHERE 
+    g.id = 13;
+--ORDER BY 
 	--m.mutation_id,
-	g.urn_mavedb, m.mutation_id;
+	--g.urn_mavedb, m.id;
+	--m.mutation_type_id DESC
 
 SELECT amino_acid_x, amino_acid_y, blosum62, grantham
 FROM substitution_matrix
@@ -30,13 +32,13 @@ ORDER BY amino_acid_x, amino_acid_y
 -------------------------------------
 SELECT g.gene_urn_id, g.urn_mavedb, g.gene_name,
 FROM gene_urn g
-LEFT JOIN mutation m ON g.gene_urn_id = m.gene_urn_id
+LEFT JOIN mutation m ON g.id = m.gene_urn_id
 WHERE m.mutation_id IS NULL
 ORDER BY g.urn_mavedb;
 -------------------------------------
 
 SELECT 
-	gene_urn_id, 
+	id, 
 	--gene_name, 
 	urn_mavedb, 
 	--pearson_dms_blosum62, 

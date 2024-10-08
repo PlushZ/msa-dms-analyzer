@@ -9,7 +9,7 @@ Base = declarative_base()
 
 class GeneURN(Base):
     __tablename__ = 'gene_urn'
-    gene_urn_id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     urn_mavedb = Column(Text, unique=True)
     gene_name = Column(Text)
     target_seq = Column(Text)
@@ -28,14 +28,15 @@ class GeneURN(Base):
 
 class Species(Base):
     __tablename__ = 'species'
-    species_id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     species_name = Column(Text, unique=True)
 
 class Mutation(Base):
     __tablename__ = 'mutation'
-    mutation_id = Column(Integer, primary_key=True, autoincrement=True)
-    gene_urn_id = Column(Integer, ForeignKey('gene_urn.gene_urn_id'))
-    species_id = Column(Integer, ForeignKey('species.species_id'))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    gene_urn_id = Column(Integer, ForeignKey('gene_urn.id'))
+    species_id = Column(Integer, ForeignKey('species.id'))
+    mutation_type_id = Column(Integer, ForeignKey('mutation_type.id'))
     position = Column(Integer)
     wt_residue = Column(Text)
     variant_residue = Column(Text)
@@ -44,11 +45,16 @@ class Mutation(Base):
     gene_urn = relationship('GeneURN')
     species = relationship('Species')
 
+class MutationType(Base):
+    __tablename__ = 'mutation_type'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    type = Column(Text, unique=True)
+
 class DMS(Base):
     __tablename__ = 'dms'
-    dms_id = Column(Integer, primary_key=True, autoincrement=True)
-    mutation_id = Column(Integer, ForeignKey('mutation.mutation_id'))
-    dms_range_id = Column(Integer, ForeignKey('dms_range.dms_range_id'))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    mutation_id = Column(Integer, ForeignKey('mutation.id'))
+    dms_range_id = Column(Integer, ForeignKey('dms_range.id'))
     score = Column(Float)
     # Relationships
     dms_range = relationship('DmsRange')
@@ -56,8 +62,8 @@ class DMS(Base):
 
 class DmsRange(Base):    
     __tablename__ = 'dms_range'
-    dms_range_id = Column(Integer, primary_key=True, autoincrement=True)
-    gene_urn_id = Column(Integer, ForeignKey('gene_urn.gene_urn_id'))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    gene_urn_id = Column(Integer, ForeignKey('gene_urn.id'))
     nonsense_from_data = Column(Float)
     max_hyperactivity = Column(Float)
     synonymous_from_data = Column(Float)
@@ -71,8 +77,8 @@ class DmsRange(Base):
 
 class MSA(Base):
     __tablename__ = 'msa'
-    msa_id = Column(Integer, primary_key=True, autoincrement=True)
-    mutation_id = Column(Integer, ForeignKey('mutation.mutation_id'))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    mutation_id = Column(Integer, ForeignKey('mutation.id'))
     shannon_entropy = Column(Float)
     jsd = Column(Float)
     phylop = Column(Float)
@@ -117,6 +123,31 @@ class SubstitutionMatrix(Base):
     str = Column(Float)
     grantham = Column(Float)
 
+class AminoAcidProperty(Base):
+    __tablename__ = 'amino_acid_property'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    one_letter_code = Column(String(1), nullable=False, unique=True)
+    three_letter_code = Column(String(3), nullable=False, unique=True)
+    full_name = Column(String(50), nullable=False)
+    chemical = Column(Text, nullable=False) 
+    charge = Column(Text, nullable=True)
+    hydrophobic = Column(Boolean, nullable=False, default=False)
+    molecular_weight_da = Column(Float, nullable=False)
+    isoelectric_point_pl = Column(Float, nullable=False)
+    polar = Column(Boolean, nullable=False, default=False) 
+    volume = Column(Text, nullable=False)
+    hydropathy_index = Column(Float, nullable=True)
+    h_bond_donor = Column(Boolean, nullable=False, default=False)
+    h_bond_acceptor = Column(Boolean, nullable=False, default=False)
+    secondary_structure_preference = Column(Text, nullable=True)
+    solvent_accessible = Column(Boolean, nullable=False, default=False)
+    pka = Column(Float, nullable=True)
+    redox_reactivity = Column(Boolean, nullable=False, default=False)
+    amphipathic = Column(Boolean, nullable=False, default=False)
+    stabilizing_interaction = Column(Text, nullable=True)  
+
+'''
+this table is redundant and has beed dropped
 class IntegratedData(Base):
     __tablename__ = 'integrated_data'
     integrated_data_id = Column(Integer, primary_key=True, autoincrement=True)
@@ -159,3 +190,4 @@ class IntegratedData(Base):
     STR = Column(Float)
     # Relationships
     mutation = relationship('Mutation')
+'''
