@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Text, Float, ForeignKey
+from sqlalchemy import Column, Integer, Text, Float, ForeignKey, String, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -7,6 +7,12 @@ Base = declarative_base()
 
 # Define ORM models
 
+class Assay(Base):
+    __tablename__ = 'assay'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    type = Column(Text, nullable=False, unique=True)
+    gene_urns = relationship('GeneURN', back_populates='assay')
+    
 class GeneURN(Base):
     __tablename__ = 'gene_urn'
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -24,7 +30,16 @@ class GeneURN(Base):
     pearson_dms_blosum62_unfavorable = Column(Float, nullable=True)
     spearman_dms_blosum62_unfavorable = Column(Float, nullable=True)
     pearson_dms_blosum62_favorable = Column(Float, nullable=True)
-    spearman_dms_blosum62_favorable = Column(Float, nullable=True)
+    spearman_dms_blosum62_favorable = Column(Float, nullable=True)        
+    pearson_dms_eve = Column(Float, nullable=True)
+    spearman_dms_eve = Column(Float, nullable=True)
+    pearson_dms_alphamissense = Column(Float, nullable=True)
+    spearman_dms_alphamissense = Column(Float, nullable=True)  
+    uniprot_id = Column(Text, nullable=True)
+    ensembl_id = Column(Text, nullable=True)
+    uniprot_target_seq_offset = Column(Integer, nullable=True)
+    assay_type = Column(Integer, ForeignKey('assay.id'), nullable=True)
+    assay = relationship('Assay', back_populates='gene_urns')
 
 class Species(Base):
     __tablename__ = 'species'
@@ -44,6 +59,12 @@ class Mutation(Base):
     # Relationships
     gene_urn = relationship('GeneURN')
     species = relationship('Species')
+    eve_score = Column(Float, nullable=True)
+    eve_class_75_set = Column(Text, nullable=True)
+    clinvar_label = Column(Text, nullable=True)
+    alphamissense_pathogenicity = Column(Float, nullable=True)
+    alphamissense_class = Column(Text, nullable=True)
+    alphafold_conf_type = Column(Text, nullable=True)
 
 class MutationType(Base):
     __tablename__ = 'mutation_type'
@@ -116,7 +137,7 @@ class SubstitutionMatrix(Base):
     megablast = Column(Float)
     nuc_4_4 = Column(Float)
     pam250 = Column(Float)
-    pam30 = Column(Float)
+    pam30 = Column(Float) 
     pam70 = Column(Float)
     rao = Column(Float)
     risler = Column(Float)
@@ -145,49 +166,3 @@ class AminoAcidProperty(Base):
     redox_reactivity = Column(Boolean, nullable=False, default=False)
     amphipathic = Column(Boolean, nullable=False, default=False)
     stabilizing_interaction = Column(Text, nullable=True)  
-
-'''
-this table is redundant and has beed dropped
-class IntegratedData(Base):
-    __tablename__ = 'integrated_data'
-    integrated_data_id = Column(Integer, primary_key=True, autoincrement=True)
-    mutation_id = Column(Integer, ForeignKey('mutation.mutation_id'))
-    dms_score = Column(Float)
-    shannon_entropy = Column(Float)
-    jsd = Column(Float)
-    phylop = Column(Float)
-    phastcons = Column(Float)
-    gerp = Column(Float)
-    percentage_identity = Column(Float)
-    ci = Column(Float)
-    variant_percentage_residue = Column(Float)
-    BENNER22 = Column(Float)
-    BENNER6 = Column(Float)
-    BENNER74 = Column(Float)
-    BLASTN = Column(Float)
-    BLASTP = Column(Float)
-    BLOSUM45 = Column(Float)
-    BLOSUM50 = Column(Float)
-    BLOSUM62 = Column(Float)
-    BLOSUM80 = Column(Float)
-    BLOSUM90 = Column(Float)
-    DAYHOFF = Column(Float)
-    FENG = Column(Float)
-    GENETIC = Column(Float)
-    GONNET1992 = Column(Float)
-    JOHNSON = Column(Float)
-    JONES = Column(Float)
-    LEVIN = Column(Float)
-    MCLACHLAN = Column(Float)
-    MDM78 = Column(Float)
-    MEGABLAST = Column(Float)
-    NUC_4_4 = Column(Float)
-    PAM250 = Column(Float)
-    PAM30 = Column(Float)
-    PAM70 = Column(Float)
-    RAO = Column(Float)
-    RISLER = Column(Float)
-    STR = Column(Float)
-    # Relationships
-    mutation = relationship('Mutation')
-'''

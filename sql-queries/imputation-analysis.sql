@@ -75,11 +75,11 @@ SELECT
     s.blosum62, 
     s.grantham,
     d.score, 
-    dr.nonsense_from_data,
-    dr.nonsense_from_method,
+    --dr.nonsense_from_data,
+    --dr.nonsense_from_method,
     --dr.max_hyperactivity,
-    --dr.synonymous_from_data,
-    --dr.synonymous_from_method,
+    dr.synonymous_from_data,
+    dr.synonymous_from_method,
     dr.calc_method,
     dr.min_from_data,
     dr.max_from_data
@@ -100,9 +100,9 @@ JOIN
 JOIN 
     amino_acid_property aap_variant ON m.variant_residue = aap_variant.one_letter_code  -- Join for variant residue
 WHERE
-    g.urn_mavedb = 'urn:mavedb:00000003-b-1'
+    --g.urn_mavedb = 'urn:mavedb:00000003-b-1'
 	--(s.grantham >= 100 OR s.blosum62 <= -2) --AND
-	--(s.blosum62 >= 2 OR s.grantham <= 50) AND 
-	--((m.wt_residue = 'L' AND m.variant_residue = 'I') OR (m.wt_residue = 'I' AND m.variant_residue = 'L'))
+	(s.blosum62 >= 2 OR s.grantham <= 50) AND 
+	((m.wt_residue = 'L' AND m.variant_residue = 'I') OR (m.wt_residue = 'I' AND m.variant_residue = 'L'))
 --ORDER BY 
 --    g.urn_mavedb DESC;
